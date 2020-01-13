@@ -17,77 +17,64 @@
 			</div>
 			<div id="mid">
 				<div>
-					<label for="nom_Field">Nom:*</label>
-					<input id="nom_Field" class="" type="text" placeholder="Votre nom" maxlength="50"
+					<label for="nom_Field">Nom *</label>
+					<input id="nom_Field" type="text" placeholder="Votre nom" minlength="2" maxlength="50"
 						title="Seuls les lettres, les tirets et les apostrophes sont acceptés dans ce champs" autofocus
 						required>
 				</div>
 				<div>
-					<label for="prenom_Field">Prénom:</label>
+					<label for="prenom_Field">Prénom</label>
 					<input id="prenom_Field" type="text" placeholder="Votre prénom" maxlength="50"
 						title="Seuls les lettres, les tirets et les apostrophes sont acceptés dans ce champs">
 				</div>
 				<div>
-					<label for="tel_Field">Téléphone:</label>
+					<label for="tel_Field">Téléphone</label>
 					<input id="tel_Field" type="tel" placeholder="01.23.45.67.89" maxlength="14"
 						title="Seuls les chiffres et les points sont acceptés dans ce champs">
 				</div>
 				<div>
-					<label for="email_Field">Email:*</label>
-					<input id="email_Field" class="" type="email" placeholder="xxx@yyyy.zzz" maxlength="50" required>
+					<label for="email_Field">E-mail *</label>
+					<input id="email_Field" type="email" placeholder="xxx@yyyy.zzz" maxlength="50" required>
 				</div>
 				<div>
-					<label for="resa1_select_Field">Votre réservation est pour:</label>
-					<select id="resa1_select_Field" class="">
-						<option value="8">Demi-journée</option>
-						<option value="15">Journée</option>
-						<option value="7">Repas</option>
-					</select>
-					<input id="resa1_qt_Field" class="" type="text" placeholder="Qté" maxlength="2"
+					<label for="resa1_select_Field">Votre réservation *</label>
+					<select id="resa1_select_Field"></select> <!-- options ajoutées depuis JS -->
+					<input id="resa1_qt_Field" class="qtFields" type="text" placeholder="Qté" maxlength="2"
 						title="Seuls les chiffres sont acceptés dans ce champs">
-					<input id="resa1_soustot_Field" class="greyedout" type="text" placeholder="Sous-total HT" readonly>
+					<input id="resa1_soustot_Field" class="sousTotFields greyedout" type="text" placeholder="Sous-total HT" readonly>
 				</div>
 				<div>
 					<label for="resa2_select_Field"></label>
-					<select id="resa2_select_Field" class="">
-						<option value="8">Demi-journée</option>
-						<option value="15">Journée</option>
-						<option value="7">Repas</option>
-					</select>
-					<input id="resa2_qt_Field" class="" type="text" placeholder="Qté" maxlength="2"
+					<select id="resa2_select_Field"></select> <!-- options ajoutées depuis JS -->
+					<input id="resa2_qt_Field" class="qtFields" type="text" placeholder="Qté" maxlength="2"
 						title="Seuls les chiffres sont acceptés dans ce champs">
-					<input id="resa2_soustot_Field" class="greyedout" type="text" placeholder="Sous-total HT" readonly>
+					<input id="resa2_soustot_Field" class="sousTotFields greyedout" type="text" placeholder="Sous-total HT" readonly>
 				</div>
 				<div>
 					<label for="resa3_select_Field"></label>
-					<select id="resa3_select_Field" class="">
-						<option value="8">Demi-journée</option>
-						<option value="15">Journée</option>
-						<option value="7">Repas</option>
-					</select>
-					<input id="resa3_qt_Field" class="" type="text" placeholder="Qté" maxlength="2"
+					<select id="resa3_select_Field"></select> <!-- options ajoutées depuis JS -->
+					<input id="resa3_qt_Field" class="qtFields" type="text" placeholder="Qté" maxlength="2"
 						title="Seuls les chiffres sont acceptés dans ce champs">
-					<input id="resa3_soustot_Field" class="greyedout" type="text" placeholder="Sous-total HT" readonly>
+					<input id="resa3_soustot_Field" class="sousTotFields greyedout" type="text" placeholder="Sous-total HT" readonly>
 				</div>
 				<div>
-					<label for="soustotalHT_Field">Sous-total HT:</label>
-					<input id="soustotalHT_Field" class="greyedout" type="text" placeholder="Sous-total HT"
-						readonly>
+					<label for="soustotalHT_Field">Sous-total HT</label>
+					<input id="soustotalHT_Field" class="greyedout" type="text" placeholder="Sous-total HT" readonly>
 				</div>
 				<div>
-					<label for="totalTTC_Field">Total TTC (TVA 20%):</label>
+					<label for="totalTTC_Field">Total TTC (TVA 20%)</label>
 					<input id="totalTTC_Field" class="greyedout" type="text" placeholder="Total TTC" readonly>
 				</div>
 				<div>
-					<label for="checkbox_Field">J'accepte les conditions générales *</label>
-					<input id="checkbox_Field" class="" type="checkbox" required>
+					<label id="checkboxLabel" for="checkbox_Field">J'accepte les conditions générales *</label>
+					<input id="checkbox_Field" type="checkbox" required>
 				</div>
 			</div>
 			<div id="bot">
 				<button id="check_button" type="button">Vérifier avant envoi</button>
 				<button id="print_button" type="button">Imprimer</button>
 				<button id="reinit_button" type="button">Réinitialiser</button>
-				<button id="send_button" type="button">Envoyer ma commande</button>
+				<button id="send_button" type="button">Envoyer</button>
 			</div>
 		</form>
 	</div>

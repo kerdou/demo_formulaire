@@ -1,42 +1,63 @@
+// GENERATION DES SELECT / OPTION
 // CALCUL
 // VERIF
 // ENVOI
 // REINIT
+
+////////////////////////////////////////   GENERATION DES SELECT / OPTION   ///////////////////////////////////////
+///                                                                                                             ///
+///                                                                                                             ///
+
+// création des <OPTION> dans les <SELECT> à partir d'un array incluant des objets au chargement de la page
+window.addEventListener('load', optionsCreate);
+
+function optionsCreate() {
+    var selectThemAll = document.getElementsByTagName('select');
+
+    var optArray = [ 
+        {text: 'Demi-journée', value: 8},
+        {text: 'Journée', value: 15},
+        {text: 'Repas', value: 7}
+    ];
+    
+    // utilisation du contenu de optArray pour les <OPTION> et ajout de toutes les <OPTION> dans chaque <SELECT> du form
+    for (var i = 0; i < selectThemAll.length; i++) {
+        optArray.forEach( (arrayItem) => {
+            var optiontoAdd = document.createElement('option');
+            optiontoAdd.text = arrayItem.text;
+            optiontoAdd.value = arrayItem.value;
+            selectThemAll[i].add(optiontoAdd);
+        });
+    }
+}
+
+///                                                                                                             ///
+///                                                                                                             ///
+////////////////////////////////////////   GENERATION DES SELECT / OPTION   ///////////////////////////////////////
 
 ////////////////////////////////////////////////////   CALCUL   ///////////////////////////////////////////////////
 ///                                                                                                             ///
 ///                                                                                                             ///
 
 // trigger au changement des valeurs des champs de la ligne 1
-document.getElementById("resa1_select_Field").addEventListener("input", resa1update);
-document.getElementById("resa1_qt_Field").addEventListener("input", resa1update);
+document.getElementById("resa1_select_Field").addEventListener("input", () => {calculParLigne(1);} );
+document.getElementById("resa1_qt_Field").addEventListener("input", () => {calculParLigne(1);} );
 document.getElementById("resa1_qt_Field").addEventListener('keydown', keyCheck);
 
-function resa1update() {
-    calculParLigne(1); // donne le numéro de ligne à utiliser pour la fonction calculParLigne()
-}
-
 // trigger au changement des valeurs des champs de la ligne 2
-document.getElementById("resa2_select_Field").addEventListener("input", resa2update);
-document.getElementById("resa2_qt_Field").addEventListener("input", resa2update);
+document.getElementById("resa2_select_Field").addEventListener("input", () => {calculParLigne(2);} );
+document.getElementById("resa2_qt_Field").addEventListener("input", () => {calculParLigne(2);} );
 document.getElementById("resa2_qt_Field").addEventListener('keydown', keyCheck);
 
-function resa2update() {
-    calculParLigne(2); // donne le numéro de ligne à utiliser pour la fonction calculParLigne()
-}
-
 // trigger au changement des valeurs des champs de la ligne 3
-document.getElementById("resa3_select_Field").addEventListener("input", resa3update);
-document.getElementById("resa3_qt_Field").addEventListener("input", resa3update);
+document.getElementById("resa3_select_Field").addEventListener("input", () => {calculParLigne(3);} );
+document.getElementById("resa3_qt_Field").addEventListener("input", () => {calculParLigne(3);} );
 document.getElementById("resa3_qt_Field").addEventListener('keydown', keyCheck);
 
-function resa3update() {
-    calculParLigne(3); // donne le numéro de ligne à utiliser pour la fonction calculParLigne()
-}
 
-// empeche d'entrer autre chose que des choses et la touche backspace dans les champs de quantité
+// empeche d'entrer autre chose que des chiffres mais permet l'appui de quelques autres touches dans les champs de quantité
 function keyCheck(e) {
-    if (!(e.key >= 0 && e.key <= 9) && (e.key != "Backspace") && (e.key != "Delete") && (e.key != "ArrowLeft") && (e.key != "ArrowRight")){ 
+    if (!(e.key >= 0 && e.key <= 9) && (e.key != "Backspace") && (e.key != "Delete") && (e.key != "ArrowLeft") && (e.key != "ArrowRight") && (e.key != "Tab")){ 
         e.preventDefault();
     } 
 }
@@ -59,7 +80,7 @@ function calculParLigne(resaNumber) {
 
 // addition des sous-totaux et calcul de la TVA
 function calculFinal_fct() {
-    var sousTotHT = 0; // initialisation de la variable
+    var sousTotHT = 0; 
     for (i= 1; i <= 3; i++) { // addition des 3 sous-totaux
         var checkResa = parseInt(document.getElementById("resa" + i + "_soustot_Field").value); // récup du sous-total de la ligne en cours
         if (isNaN(checkResa)) { 
@@ -107,75 +128,93 @@ function verif(formCheck) {
 
     // vérif du nom
     // lancer la fonction de vérification orthographique
-    // si le test n'est pas bon, ajout du message d'erreur
-    if (nom.length == 0) {
+    // si le test n'est pas bon, ajout du message d'erreur et le champ passe en rouge
+    // si le test est bon le champ passe en vert
+    if (nom.length < 2) {
         verif_message += "Veuillez saisir votre nom de famille" + "\n";
-        document.getElementById("nom_Field").setAttribute("class", "red_border");
+        document.getElementById('nom_Field').classList.remove('validBackground');
+        document.getElementById('nom_Field').classList.add('errorBackground');
     } else if (nomPrenomRegEx.test(nom)) { 
-        document.getElementById("nom_Field").setAttribute("class", "green_border");
+        document.getElementById('nom_Field').classList.remove('errorBackground');
+        document.getElementById('nom_Field').classList.add('validBackground');
     } else {
         verif_message += "Veuillez ne pas saisir de caractères spéciaux et de nombres dans votre nom de famille" + "\n";
-        document.getElementById("nom_Field").setAttribute("class", "red_border");        
+        document.getElementById('nom_Field').classList.remove('validBackground');
+        document.getElementById('nom_Field').classList.add('errorBackground');
     }
 
     // vérif du prenom
     // si le champ n'est pas vide, lancer la fonction de vérification orthographique
-    // si le test n'est pas bon, ajout du message d'erreur
-    // vérification du nom de famille
+    // si le test n'est pas bon, ajout du message d'erreur et le champ passe en rouge
+    // si le test est bon le champ passe en vert
     if (prenom.length == 0) {
-        document.getElementById("prenom_Field").setAttribute("class", "");
-    } else if (prenom.length > 0) {
-        if (nomPrenomRegEx.test(prenom)) { 
-            document.getElementById("prenom_Field").setAttribute("class", "green_border");
+        document.getElementById('prenom_Field').classList.remove('validBackground');
+        document.getElementById('prenom_Field').classList.remove('errorBackground');
+    } else {
+        if (nomPrenomRegEx.test(prenom)) {
+            document.getElementById('prenom_Field').classList.remove('errorBackground'); 
+            document.getElementById('prenom_Field').classList.add('validBackground');
         } else {
             verif_message += "Veuillez saisir votre prénom" + "\n";
-            document.getElementById("prenom_Field").setAttribute("class", "red_border");        
+            document.getElementById('prenom_Field').classList.remove('validBackground');
+            document.getElementById('prenom_Field').classList.add('errorBackground');        
         }
     }
 
     // vérif du numéro de tel
     // si le numéro n'est pas vide, lancer a vérification du numéro
-    // si le test n'est pas bon, ajout du message d'erreur
-    // vérification du nom de famille
+    // si le test n'est pas bon, ajout du message d'erreur et le champ passe en rouge
+    // si le test est bon le champ passe en vert
     if (tel.length == 0) {
-        document.getElementById("tel_Field").setAttribute("class", "");
-    } else if (tel.length > 0) {
+        document.getElementById('tel_Field').classList.remove('validBackground');
+        document.getElementById('tel_Field').classList.remove('errorBackground');
+    } else {
         if (telRegEx.test(tel)) { 
-            document.getElementById("tel_Field").setAttribute("class", "green_border");
+            document.getElementById('tel_Field').classList.remove('errorBackground');
+            document.getElementById('tel_Field').classList.add('validBackground');
         } else {
             verif_message += "Vérifiez votre numéro de téléphone" + "\n";
-            document.getElementById("tel_Field").setAttribute("class", "red_border");        
+            document.getElementById('tel_Field').classList.remove('validBackground');
+            document.getElementById('tel_Field').classList.add('errorBackground');      
         }
     }
     
     // vérif du mail
     // vérification de la syntaxe de l'adresse
-    // si le test n'est pas bon, ajout du message d'erreur
+    // si le test n'est pas bon, ajout du message d'erreur et le champ passe en rouge
+    // si le test est bon le champ passe en vert
     if (mailRegEx.test(email))  {
-        document.getElementById("email_Field").setAttribute("class", "green_border");
+        document.getElementById('email_Field').classList.remove('errorBackground');
+        document.getElementById('email_Field').classList.add('validBackground');
     } else {
         verif_message += "Veuillez saisir votre adresse mail sans oublier le @" + "\n";
-        document.getElementById("email_Field").setAttribute("class", "red_border");        
+        document.getElementById('email_Field').classList.remove('validBackground'); 
+        document.getElementById('email_Field').classList.add('errorBackground');      
     }
 
     // vérification du montant de la commande, s'il est nul ou NaN alors un message d'erreur apparait
     if ((order == 0) || isNaN(order) ) {
         verif_message += "Vous n'avez saisi aucune commande" + "\n";
         for (var i = 0; i < resa_list.length; i++) {
-            document.getElementById(resa_list[i]).setAttribute("class", "red_border");
+            document.getElementById(resa_list[i]).classList.remove('validBackground');
+            document.getElementById(resa_list[i]).classList.add('errorBackground');
         }
     } else {
         for (var ii = 0; ii < resa_list.length; ii++) {
-            document.getElementById(resa_list[ii]).setAttribute("class", ""); 
+            document.getElementById(resa_list[ii]).classList.remove('errorBackground'); 
+            document.getElementById(resa_list[ii]).classList.add('validBackground');
         }
     }
 
     // vérification sur la checkbox de CGV, si elle n'est pas coché un message d'erreur apparait
-    if (checkbox == false) {
-        verif_message += "Veuillez accepter les conditions générales ";
-        document.getElementById("checkbox_Field").setAttribute("class", "red_border");
+    if (checkbox) {
+        document.getElementById('checkbox_Field').classList.remove('red_border');
+        document.getElementById('checkbox_Field').classList.add('green_border');
+
     } else {
-        document.getElementById("checkbox_Field").setAttribute("class", "green_border");
+        verif_message += "Veuillez accepter les conditions générales ";
+        document.getElementById('checkbox_Field').classList.remove('green_border');
+        document.getElementById('checkbox_Field').classList.add('red_border');
     }
 
     // si le message d'erreur n'est pas vide il apparait, sinon le form est déclaré comme OK
@@ -201,7 +240,7 @@ document.getElementById("print_button").addEventListener("click", launchPrint);
 function launchPrint(){
     var formCheck = verif(formCheck); // vérification de la conformité des champs
 
-    if (formCheck == true){
+    if (formCheck){
         window.print();
     }    
 }
@@ -246,7 +285,7 @@ function envoi() {
     }
 
     // si les champs sont tous conformes alors on génére le mail
-    if (formCheck == true){
+    if (formCheck){
         window.open("mailto:votre.adresse@mail.com?subject=Réservation de " + document.getElementById("prenom_Field").value + "%20" + document.getElementById("nom_Field").value +
             "&body=Nom: " + " " + document.getElementById("nom_Field").value + "%0A" +
             "Prénom: " + " " + document.getElementById("prenom_Field").value + "%0A" +
@@ -277,17 +316,14 @@ document.getElementById("reinit_button").addEventListener("click", reinit);
 // fonction de réinit du forumulaire
 function reinit() {
     
-    // suppression des classes "red_border" et "green_border" dans tous les champs du tableau "fields_reset"
+    // suppression des classes CSS de validation dans tous les champs du tableau "fields_reset"
     var fields_reset = ["nom_Field", "prenom_Field", "tel_Field", "email_Field", "resa1_qt_Field", "resa2_qt_Field", "resa3_qt_Field", "checkbox_Field"];
     for (i = 0; i < fields_reset.length; i++) {        
-        document.getElementById(fields_reset[i]).setAttribute("class", ""); 
+        document.getElementById(fields_reset[i]).classList.remove('errorBackground'); 
+        document.getElementById(fields_reset[i]).classList.remove('validBackground'); 
+        document.getElementById(fields_reset[i]).classList.remove('red_border'); 
+        document.getElementById(fields_reset[i]).classList.remove('green_border');          
     }
-
-    // suppression des classes "red_border" et "green_border" dans tous les selects
-    var selectCount = document.getElementsByTagName("select").length;
-    for (ii = 0; ii < selectCount; ii++) {        
-        document.getElementsByTagName("select")[ii].setAttribute("class", ""); 
-    }  
 
     // reset du formulaire
     document.getElementById("formulaire").reset();
