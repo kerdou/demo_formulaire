@@ -5,14 +5,27 @@
 // RESET
 
 
-var nbrOfResaLines = 0;
+var nbrOfResaLines = 0; // compteur du nombre d'élements dans 'resa_section'
 
 window.addEventListener('load', formInit); // création des <OPTION> dans les <SELECT> à partir d'un array incluant des objets au chargement de la page
+
 document.getElementById("check_button").addEventListener("click", formChecks); // clic sur "Vérifier avant envoi" pour vérifier les champs
 document.getElementById("print_button").addEventListener("click", launchPrint); // clic sur "Imprimer" pour lancer la fenetre d'impression
 document.getElementById("reinit_button").addEventListener("click", reinit); // clic sur "Réinitialiser" faire un reset de tous les champs
 document.getElementById("send_button").addEventListener("click", envoi); // clic sur le bouton "Envoyer" pour lancer la vérification des champs et la création du mail si tout est bon
+
 document.getElementById("tel_Field").addEventListener("keydown", telKeyCheck) // bloquant tous les caractéres sauf les chiffres et quelques touches utiles dans le champ de téléphone
+
+// relance la vérification des champs à chaque fois que l'un d'eux perd le focus
+document.getElementById("nom_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("prenom_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("tel_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("email_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("resa1_qt_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("resa2_qt_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("resa3_qt_Field").addEventListener("focusout", focusOutRecheck);
+document.getElementById("checkbox_Field").addEventListener("focusout", focusOutRecheck);
+
 
 /** Ajout d'éventListeners sur les lignes de reservation */
 function resaLinesAddEventListener() {
@@ -108,7 +121,7 @@ function qtyKeyCheck(event) {
  * * Puis on prend le sous-total de chaque ligne de résa pour les combiner et les afficher avec finalCalculationAndDisplay()
  */
 function calculationAndDisplayProcess() {
-    var event = this;
+    let event = this;
     resaLineCalculationAndDisplay(event);
     finalCalculationAndDisplay();
 }
@@ -159,9 +172,10 @@ function finalCalculationAndDisplay() {
 
 
 /** Série de vérifications des champs du formulaire
+ * @param {string} target True pour afficher un message indiquant les changements à faire
  * @returns {boolean} Renvoie du statut de vérification du formulaire
  */
-function formChecks() {
+function formChecks(target = 'all') {
     let verifMessage = ""; // contenu du message d'erreur
 
 
@@ -218,23 +232,55 @@ function formChecks() {
     let mailConcat = mailBeginning + mailMiddle + mailEnding;
     let mailRegex = new RegExp(mailConcat); // création du regex
 
+    // lancement des regex et des checks suivant le cas de figure demandé
+    switch (target) {
+        case 'all':
+            verifMessage += lastNameCheck(nomPrenomRegex);
+            verifMessage += firstNameCheck(nomPrenomRegex);
+            verifMessage += telCheck(telRegex);
+            verifMessage += mailCheck(mailRegex);
+            verifMessage += orderCheck();
+            verifMessage += checkboxCheck();
+            break;
+        case 'nom_Field':
+            verifMessage += lastNameCheck(nomPrenomRegex);
+            break;
+        case 'prenom_Field':
+            verifMessage += firstNameCheck(nomPrenomRegex);
+            break;
+        case 'tel_Field':
+            verifMessage += telCheck(telRegex);
+            break;
+        case 'email_Field':
+            verifMessage += mailCheck(mailRegex);
+            break;
+        case 'resa1_qt_Field':
+        case 'resa2_qt_Field':
+        case 'resa3_qt_Field':
+            verifMessage += orderCheck();
+            break;
+        case 'checkbox_Field':
+            verifMessage += checkboxCheck();
+        break;
+        default:
+            verifMessage += lastNameCheck(nomPrenomRegex);
+            verifMessage += firstNameCheck(nomPrenomRegex);
+            verifMessage += telCheck(telRegex);
+            verifMessage += mailCheck(mailRegex);
+            verifMessage += orderCheck();
+            verifMessage += checkboxCheck();
+    }
 
-
-    // lancement des regex et des checks
-    verifMessage += lastNameCheck(nomPrenomRegex);
-    verifMessage += firstNameCheck(nomPrenomRegex);
-    verifMessage += telCheck(telRegex);
-    verifMessage += mailCheck(mailRegex);
-    verifMessage += orderCheck();
-    verifMessage += checkboxCheck();
 
 
     // si le message d'erreur n'est pas vide il apparait, sinon le form est déclaré comme OK
-    if (verifMessage == "") {
+    if (verifMessage == '') {
         formCheckStatus = true;
     } else {
         formCheckStatus = false;
-        alert(verifMessage);
+        if (target == 'all') {
+            alert(verifMessage); // affichage les changements à faire, ne doit pas s'appliquer pour les focusout des champs
+        }
     }
     return formCheckStatus; // renvoi du résultat de formCheck pour envoi()
 }
@@ -379,7 +425,15 @@ function checkboxCheck() {
     return verifMessage;
 }
 
+/** Relance la vérification des champs quand l'un d'eux perd le focus et qu'il n'est pas vide */
+function focusOutRecheck() {
+    let event = this;
 
+    if (event.value.length != 0) {
+        let target = event.id;
+        formChecks(target);
+    }
+}
 
 
 /** Lancement de l'impression du formulaire */
@@ -434,9 +488,9 @@ function headerBuilder(nom, prenom) {
     let headerBuilder = 'mailto:address@domain.com?';
 
     if (prenom.length == 0) {
-        headerBuilder += 'subject=Réservation de ' + nom;
+        headerBuilder += 'subject=Réservation de ' + nom.toUpperCase();
     } else {
-        headerBuilder += 'subject=Réservation de ' + prenom + ' ' + nom;
+        headerBuilder += 'subject=Réservation de ' + prenom + ' ' + nom.toUpperCase();
     }
 
     headerBuilder += '&body=';
@@ -456,7 +510,7 @@ function headerBuilder(nom, prenom) {
 function bodyBeginningBuilder(nom, prenom, tel, mail) {
     let recapBeginning = '';
 
-    recapBeginning += 'Nom: ' + nom + '%0A';
+    recapBeginning += 'Nom: ' + nom.toUpperCase() + '%0A';
 
     if (prenom.length != 0) {
         recapBeginning += 'Prénom: ' + prenom + '%0A';
@@ -479,7 +533,7 @@ function bodyBeginningBuilder(nom, prenom, tel, mail) {
  * * Passer à la ligne suivante
  * @returns {string} Texte généré pour toutes les résa
  */
- function resaBuildUp() {
+function resaBuildUp() {
     let resaLine = '';
 
     for (line = 1; line <= nbrOfResaLines; line++) { // addition des 3 sous-totaux
@@ -490,7 +544,7 @@ function bodyBeginningBuilder(nom, prenom, tel, mail) {
                 " pour un sous-total de " + document.getElementById("resa" + line + "_soustot_Field").value + '%0A';
         }
     }
-    console.log(resaLine);
+
     return resaLine;
 }
 
@@ -507,8 +561,6 @@ function recapBodyEndingBuilder(sousTot, totTTC) {
     recapEnding += '%0A';
     recapEnding += 'Sous-total HT: ' + sousTot + '%0A';
     recapEnding += 'Total TTC (TVA 20%): ' + totTTC;
-
-    console.log(recapEnding);
 
     return recapEnding;
 }
