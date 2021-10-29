@@ -1,9 +1,9 @@
 body {
-  background-color: WhiteSmoke;
+  background-color: rgb(93, 93, 93);
   font-family: Tahoma;
 }
 
-#container {  
+#container {
   margin: auto;
   width: 450px;
 }
@@ -18,7 +18,7 @@ label {
 }
 
 input {
-  padding: 0.2em 0.35em; 
+  padding: 0.2em 0.35em;
   margin-bottom: 0.8em;
 }
 
