@@ -48,8 +48,8 @@ input, select, button {
 }
 
 .red_border {
-	-webkit-box-shadow: 0px 0px 0px 3px #FF3636;
-	box-shadow: 0px 0px 0px 3px #FF3636;
+	-webkit-box-shadow: 0px 0px 0px 2px #FF3636;
+	box-shadow: 0px 0px 0px 2px #FF3636;
 }
 
 .green_border {
