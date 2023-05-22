@@ -29,18 +29,18 @@
 				</div>
 				<div>
 					<label for="tel_Field">Téléphone</label>
-					<input id="tel_Field" type="tel" placeholder="01.23.45.67.89" maxlength="17"
+					<input id="tel_Field" type="tel" inputmode=”tel” placeholder="01.23.45.67.89" maxlength="17"
 						title="Seuls les chiffres et les points sont acceptés dans ce champs">
 				</div>
 				<div>
 					<label for="email_Field">E-mail *</label>
-					<input id="email_Field" type="email" placeholder="adresse@mail.com" maxlength="50" required>
+					<input id="email_Field" type="email" inputmode=”email” placeholder="adresse@mail.com" maxlength="50" required>
 				</div>
 				<div id="resa_section">
 					<div id="resa1">
 						<label for="resa1_select_Field">Votre réservation *</label>
 						<select id="resa1_select_Field"></select> <!-- options ajoutées depuis JS -->
-						<input id="resa1_qt_Field" class="qtFields" type="text" placeholder="Qté" maxlength="2"
+						<input id="resa1_qt_Field" class="qtFields" type="text" inputmode=”numeric” placeholder="Qté" maxlength="2"
 							title="Seuls les chiffres sont acceptés dans ce champs">
 						<input id="resa1_soustot_Field" class="sousTotFields greyedout" type="text"
 							placeholder="Sous-total HT" readonly>
@@ -48,7 +48,7 @@
 					<div id="resa2">
 						<label for="resa2_select_Field"></label>
 						<select id="resa2_select_Field"></select> <!-- options ajoutées depuis JS -->
-						<input id="resa2_qt_Field" class="qtFields" type="text" placeholder="Qté" maxlength="2"
+						<input id="resa2_qt_Field" class="qtFields" type="text" inputmode=”numeric” placeholder="Qté" maxlength="2"
 							title="Seuls les chiffres sont acceptés dans ce champs">
 						<input id="resa2_soustot_Field" class="sousTotFields greyedout" type="text"
 							placeholder="Sous-total HT" readonly>
@@ -56,7 +56,7 @@
 					<div id="resa3">
 						<label for="resa3_select_Field"></label>
 						<select id="resa3_select_Field"></select> <!-- options ajoutées depuis JS -->
-						<input id="resa3_qt_Field" class="qtFields" type="text" placeholder="Qté" maxlength="2"
+						<input id="resa3_qt_Field" class="qtFields" type="text" inputmode=”numeric” placeholder="Qté" maxlength="2"
 							title="Seuls les chiffres sont acceptés dans ce champs">
 						<input id="resa3_soustot_Field" class="sousTotFields greyedout" type="text"
 							placeholder="Sous-total HT" readonly>
